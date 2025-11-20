@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   traefik_estefany:
-    image: ghcr.io/traefik_estefany/app:1.0.0
+    image: ghcr.io/tefy89/traefik_estefany:1.0.0
     deploy:
       replicas: 1
       resources:
