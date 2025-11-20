@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  traefik_estefany:
+    image: ghcr.io/traefik_estefany/app:1.0.0
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+      labels:
+        - "traefik.enable=true"
+
+        # HTTP → HTTPS redirection
+        - "traefik.http.routers.traefik_estefany.entrypoints=http"
+        - "traefik.http.routers.traefik_estefany.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.middlewares.traefik_estefany-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.traefik_estefany.middlewares=traefik_estefany-https-redirect"
+
+        # Secure HTTPS router
+        - "traefik.http.routers.traefik_estefany-secure.entrypoints=https"
+        - "traefik.http.routers.traefik_estefany-secure.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.routers.traefik_estefany-secure.tls=true"
+        - "traefik.http.routers.traefik_estefany-secure.tls.certresolver=http"
+        - "traefik.http.routers.traefik_estefany-secure.service=traefik_estefany"
+
+        # Service port mapping
+        - "traefik.http.services.traefik_estefany.loadbalancer.server.port=5000"
+
+        # Network
+        - "traefik.docker.network=traefik-public"
+
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
