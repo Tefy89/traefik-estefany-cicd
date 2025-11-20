@@ -2,7 +2,7 @@ name: Deploy traefik_estefany
 
 on:
   push:
-    branches: "quintoa"
+    branches: "master"
 
 permissions:
   contents: read
@@ -31,7 +31,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ghcr.io/traefik_estefany/app:1.0.0
+        tags: ghcr.io/<TU_USUARIO>/traefik_estefany:1.0.0
 
     - name: 🧪 Test SSH connection
       uses: appleboy/ssh-action@v1
