@@ -27,11 +27,11 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 🏗️ Build and push Docker image
+    - name:  Build and push Docker image
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ghcr.io/<TU_USUARIO>/traefik_estefany:1.0.0
+        tags: ghcr.io/tefy89/traefik_estefany:1.0.0
 
     - name: 🧪 Test SSH connection
       uses: appleboy/ssh-action@v1
