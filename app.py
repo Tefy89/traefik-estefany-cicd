@@ -157,7 +157,7 @@ HTML_PAGE = """
         <nav>
             <a onclick="window.scrollTo(0,0)">Inicio</a>
             <a onclick="alert('Traefik + Docker Swarm + GitHub Actions')">Tecnologías</a>
-            <a onclick="alert('Desarrollado por Estefany ❤️')">Sobre mí</a>
+            <a onclick="alert('Desarrollado por grupo 2')">Sobre mí</a>
         </nav>
     </header>
 
@@ -205,7 +205,7 @@ HTML_PAGE = """
 
     <!-- FOOTER -->
     <footer>
-        © 2025 — Desarrollado con ❤️ por Estefany
+        © 2025 — App de ejemplo con Traefik y Flask
     </footer>
 
 </body>
