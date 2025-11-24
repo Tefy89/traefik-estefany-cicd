@@ -1,4 +1,4 @@
-IMAGE_NAME=traefik_estefany
+IMAGE_NAME=traefik-estefany
 GHCR_USER=tefy89
 VERSION=1.0.0
 
