@@ -1,4 +1,4 @@
-name: Deploy traefik-estefany
+name: Deploy traefik_estefany
 
 on:
   push:
@@ -25,52 +25,52 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB-TOKEN }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: 🏗️ Build and push Docker image
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ghcr.io/tefy89/traefik-estefany:1.0.0
+        tags: ghcr.io/tefy89/traefik_estefany:1.0.0
 
     - name: 🧪 Test SSH connection
       uses: appleboy/ssh-action@v1
       with:
-        host: ${{ secrets.VPS-HOST }}
-        username: ${{ secrets.VPS-USER }}
-        password: ${{ secrets.VPS-PASSWORD }}
-        port: ${{ secrets.VPS-SSH-PORT }}
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        port: ${{ secrets.VPS_SSH_PORT }}
         script: |
-          echo "SSH OK en traefik-estefany"
+          echo "SSH OK en traefik_estefany"
           hostname
           whoami
 
     - name: 📤 Enviar stack.yml al servidor
       uses: appleboy/scp-action@v1
       with:
-        host: ${{ secrets.VPS-HOST }}
-        username: ${{ secrets.VPS-USER }}
-        password: ${{ secrets.VPS-PASSWORD }}
-        port: ${{ secrets.VPS-SSH-PORT }}
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        port: ${{ secrets.VPS_SSH_PORT }}
         source: "stack.yml"
-        target: "/home/${{ secrets.VPS-USER }}/despliegue"
+        target: "/home/${{ secrets.VPS_USER }}/despliegue"
 
     - name: 🚀 Despliegue de servicios
       uses: appleboy/ssh-action@v1
       with:
-        host: ${{ secrets.VPS-HOST }}
-        username: ${{ secrets.VPS-USER }}
-        password: ${{ secrets.VPS-PASSWORD }}
-        port: ${{ secrets.VPS-SSH-PORT }}
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        password: ${{ secrets.VPS_PASSWORD }}
+        port: ${{ secrets.VPS_SSH_PORT }}
         script: |
           echo "📂 Moviéndome al directorio de despliegue"
-          cd /home/${{ secrets.VPS-USER }}/despliegue
+          cd /home/${{ secrets.VPS_USER }}/despliegue
 
           echo "🗑️ Eliminando stack previo (si existe)"
-          docker stack rm traefik-estefany || true
+          docker stack rm traefik_estefany || true
           sleep 5
 
           echo "🚀 Desplegando nuevo stack"
-          docker stack deploy -c stack.yml --with-registry-auth traefik-estefany
+          docker stack deploy -c stack.yml --with-registry-auth traefik_estefany
 
           echo "✅ Despliegue completado con éxito"

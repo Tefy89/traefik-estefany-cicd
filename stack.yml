@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+
   traefik:
     image: traefik:2.10
     command:
@@ -10,7 +11,7 @@ services:
       - "--entrypoints.https.address=:443"
       - "--certificatesresolvers.http.acme.httpchallenge=true"
       - "--certificatesresolvers.http.acme.httpchallenge.entrypoint=http"
-      - "--certificatesresolvers.http.acme.email=tu-correo@gmail.com"
+      - "--certificatesresolvers.http.acme.email=tu_correo@gmail.com"
       - "--certificatesresolvers.http.acme.storage=/acme.json"
     ports:
       - "80:80"
@@ -24,19 +25,19 @@ services:
     networks:
       - traefik-public
 
-  app:
-    image: ghcr.io/tefy89/traefik-estefany:1.0.0
+  traefik_estefany:
+    image: ghcr.io/tefy89/traefik_estefany:1.0.0
     deploy:
       replicas: 1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.app.rule=Host(`traefik-estefany.byronrm.com`)"
-        - "traefik.http.routers.app.entrypoints=http"
-        - "traefik.http.routers.app-secure.rule=Host(`traefik-estefany.byronrm.com`)"
-        - "traefik.http.routers.app-secure.entrypoints=https"
-        - "traefik.http.routers.app-secure.tls=true"
-        - "traefik.http.routers.app-secure.tls.certresolver=http"
-        - "traefik.http.services.app.loadbalancer.server.port=5000"
+        - "traefik.http.routers.traefik_estefany.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.routers.traefik_estefany.entrypoints=http"
+        - "traefik.http.routers.traefik_estefany-secure.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.routers.traefik_estefany-secure.entrypoints=https"
+        - "traefik.http.routers.traefik_estefany-secure.tls=true"
+        - "traefik.http.routers.traefik_estefany-secure.tls.certresolver=http"
+        - "traefik.http.services.traefik_estefany.loadbalancer.server.port=5000"
         - "traefik.docker.network=traefik-public"
     networks:
       - traefik-public
