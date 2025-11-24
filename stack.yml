@@ -1,38 +1,48 @@
 version: '3.9'
 
 services:
-  traefik_estefany:
+  traefik:
+    image: traefik:2.10
+    command:
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesresolvers.http.acme.httpchallenge=true"
+      - "--certificatesresolvers.http.acme.httpchallenge.entrypoint=http"
+      - "--certificatesresolvers.http.acme.email=tu_correo@gmail.com"
+      - "--certificatesresolvers.http.acme.storage=/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "acme:/acme.json"
+    deploy:
+      labels:
+        - "traefik.enable=true"
+    networks:
+      - traefik-public
+
+  app:
     image: ghcr.io/tefy89/traefik_estefany:1.0.0
     deploy:
       replicas: 1
-      resources:
-        limits:
-          cpus: "0.50"
-          memory: 512M
       labels:
         - "traefik.enable=true"
-
-        # HTTP → HTTPS redirection
-        - "traefik.http.routers.traefik_estefany.entrypoints=http"
-        - "traefik.http.routers.traefik_estefany.rule=Host(`traefik_estefany.byronrm.com`)"
-        - "traefik.http.middlewares.traefik_estefany-https-redirect.redirectscheme.scheme=https"
-        - "traefik.http.routers.traefik_estefany.middlewares=traefik_estefany-https-redirect"
-
-        # Secure HTTPS router
-        - "traefik.http.routers.traefik_estefany-secure.entrypoints=https"
-        - "traefik.http.routers.traefik_estefany-secure.rule=Host(`traefik_estefany.byronrm.com`)"
-        - "traefik.http.routers.traefik_estefany-secure.tls=true"
-        - "traefik.http.routers.traefik_estefany-secure.tls.certresolver=http"
-        - "traefik.http.routers.traefik_estefany-secure.service=traefik_estefany"
-
-        # Service port mapping
-        - "traefik.http.services.traefik_estefany.loadbalancer.server.port=5000"
-
-        # Network
+        - "traefik.http.routers.app.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.routers.app.entrypoints=http"
+        - "traefik.http.routers.app-secure.rule=Host(`traefik_estefany.byronrm.com`)"
+        - "traefik.http.routers.app-secure.entrypoints=https"
+        - "traefik.http.routers.app-secure.tls=true"
+        - "traefik.http.routers.app-secure.tls.certresolver=http"
+        - "traefik.http.services.app.loadbalancer.server.port=5000"
         - "traefik.docker.network=traefik-public"
-
     networks:
       - traefik-public
+
+volumes:
+  acme:
 
 networks:
   traefik-public:
