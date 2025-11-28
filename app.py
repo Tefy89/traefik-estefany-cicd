@@ -172,7 +172,7 @@ HTML_PAGE = """
 
     <!-- FEATURES -->
     <section class="features">
-        <h2>Características del Proyecto</h2>
+        <h2>Proyectoooooo</h2>
 
         <div class="cards">
 
